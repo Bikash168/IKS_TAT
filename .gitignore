@@ -1,7 +1,6 @@
 node_modules/
 .next/
 public/videos/
-public/Iks image/
 public/Iks Interview/
 app/videos/
 .env
