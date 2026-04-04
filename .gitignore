@@ -2,6 +2,5 @@ node_modules/
 .next/
 public/videos/
 public/Iks Interview/
-app/videos/
 .env
 .env.local
