@@ -1,12 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Footer from "../components/Footer";
 import Mandala from "../components/Mandala";
-import { barData, findings } from "../components/data";
 import QuestionnaireTab from "../components/QuestionnaireSection";
 
 type TabId = "questionnaire" | "respondents" | "caretaker";
+
+const TABS: { id: TabId; label: string; shortLabel: string }[] = [
+  { id: "questionnaire", label: "Questionnaire",           shortLabel: "Questionnaire" },
+  { id: "respondents",   label: "Respondents Analysis",    shortLabel: "Respondents" },
+  { id: "caretaker",     label: "Care Taker Analysis",     shortLabel: "Care Taker" },
+];
 
 /* ── Main page ─────────────────────────────────────────────────────────── */
 export default function AnalysisPage() {
@@ -14,20 +19,23 @@ export default function AnalysisPage() {
 
   return (
     <main style={{ background: "var(--cream)", minHeight: "100vh" }}>
+
       {/* ── HERO ── */}
       <div
         style={{
           background: "var(--deep)",
-          padding: "5rem 1.5rem 4rem",
+          padding: "clamp(3rem, 8vw, 5rem) 1.25rem clamp(2.5rem, 6vw, 4rem)",
           position: "relative",
+          overflow: "hidden",
         }}
       >
         <div
           style={{
             position: "absolute",
             top: "50%",
-            right: "5%",
+            right: "clamp(-60px, 5%, 5%)",
             transform: "translateY(-50%) rotate(15deg)",
+            pointerEvents: "none",
           }}
         >
           <Mandala size={280} opacity={0.07} />
@@ -43,44 +51,59 @@ export default function AnalysisPage() {
         <h1
           style={{
             fontFamily: "'Cinzel', serif",
-            fontSize: "clamp(1.8rem, 4vw, 3rem)",
+            fontSize: "clamp(1.5rem, 5vw, 3rem)",
             color: "#fff",
             textAlign: "center",
+            margin: "0.5rem 0",
+            lineHeight: 1.2,
           }}
         >
           Survey & Field Analysis
         </h1>
 
-        <p style={{ textAlign: "center", color: "rgba(255,255,255,0.6)" }}>
+        <p
+          style={{
+            textAlign: "center",
+            color: "rgba(255,255,255,0.6)",
+            fontSize: "clamp(0.82rem, 2vw, 1rem)",
+            margin: "0.5rem 0 0",
+          }}
+        >
           Quantitative and qualitative outcomes from field research
         </p>
       </div>
 
       {/* ── CONTENT ── */}
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "3rem 1.25rem" }}>
+      <div
+        style={{
+          maxWidth: 1100,
+          margin: "0 auto",
+          padding: "clamp(1.5rem, 4vw, 3rem) clamp(1rem, 4vw, 1.25rem)",
+        }}
+      >
 
         {/* ── Main Tabs ── */}
         <div
           style={{
             display: "flex",
-            gap: "0.5rem",
+            gap: 0,
             borderBottom: "1px solid rgba(92,45,0,0.15)",
             marginBottom: "2rem",
+            overflowX: "auto",
+            WebkitOverflowScrolling: "touch" as any,
+            scrollbarWidth: "none" as any,
+            msOverflowStyle: "none" as any,
           }}
         >
-          {(
-            [
-              { id: "questionnaire", label: "Questionnaire" },
-              { id: "respondents",   label: "Respondents Analysis" },
-              { id: "caretaker",     label: "Care Taker Analysis" },
-            ] as { id: TabId; label: string }[]
-          ).map(({ id, label }) => (
+          {TABS.map(({ id, label, shortLabel }) => (
             <button
               key={id}
               className={`analysis-tab ${tab === id ? "active" : ""}`}
               onClick={() => setTab(id)}
+              style={{ whiteSpace: "nowrap", flexShrink: 0 }}
             >
-              {label}
+              <span className="tab-label-full">{label}</span>
+              <span className="tab-label-short">{shortLabel}</span>
             </button>
           ))}
         </div>
@@ -145,19 +168,34 @@ export default function AnalysisPage() {
 
       <Footer />
 
-      {/* Shared styles for flipbook panels */}
+      {/* ── Responsive styles ── */}
       <style>{`
+        /* Hide scrollbar on tab strip */
+        div::-webkit-scrollbar { display: none; }
+
+        /* Tab label switching */
+        .tab-label-short { display: none; }
+        .tab-label-full  { display: inline; }
+
+        @media (max-width: 480px) {
+          .tab-label-full  { display: none; }
+          .tab-label-short { display: inline; }
+        }
+
+        /* Intro card */
         .q-intro-card {
           background: #fff8f0;
           border: 1px solid rgba(92,45,0,0.1);
           border-radius: 12px;
-          padding: 1rem 1.25rem;
+          padding: clamp(0.75rem, 3vw, 1rem) clamp(0.875rem, 3vw, 1.25rem);
           margin-bottom: 1.25rem;
-          font-size: 0.88rem;
+          font-size: clamp(0.8rem, 2vw, 0.88rem);
           color: var(--muted, #777);
           line-height: 1.7;
         }
         .q-intro-card strong { color: var(--earth, #5c2d00); }
+
+        /* Flipbook frame */
         .q-flip-frame {
           border-radius: 12px;
           overflow: hidden;
@@ -169,17 +207,26 @@ export default function AnalysisPage() {
         .q-flip-frame iframe {
           display: block;
           width: 100%;
-          height: 600px;
+          height: clamp(320px, 55vw, 700px);
           border: none;
         }
-        @media (max-width: 640px) {
-          .q-flip-frame iframe { height: 420px; }
-        }
+
+        /* Note text */
         .q-note {
-          font-size: 0.72rem;
+          font-size: clamp(0.68rem, 1.8vw, 0.72rem);
           color: var(--muted, #aaa);
           text-align: center;
           margin-top: 0.625rem;
+          padding: 0 1rem;
+        }
+
+        /* analysis-tab base (inherits from global, patch responsive) */
+        @media (max-width: 480px) {
+          .analysis-tab {
+            font-size: 0.68rem !important;
+            padding: 8px 10px !important;
+            letter-spacing: 0.04em !important;
+          }
         }
       `}</style>
     </main>
