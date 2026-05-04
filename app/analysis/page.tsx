@@ -6,124 +6,11 @@ import Mandala from "../components/Mandala";
 import { barData, findings } from "../components/data";
 import QuestionnaireTab from "../components/QuestionnaireSection";
 
-type TabId = "findings" | "data" | "questionnaire";
-
-/* ── Thematic findings ─────────────────────────────────────────────────── */
-const thematicFindings = [
-  {
-    title: "Social Cohesion",
-    text: "The research confirms that Bhagabata Tungis serve as primary spaces for building and maintaining social cohesion. Regular attendance correlates strongly with participants' sense of community belonging and trust in neighbors.",
-  },
-  {
-    title: "Ethical Value Transmission",
-    text: "Through narrative recitation and communal discussion of the Bhagabata, participants internalize principles of dharma and righteous conduct.",
-  },
-  {
-    title: "Inclusivity Metrics",
-    text: "Participation across caste boundaries is higher than in other institutions, and women's roles are expanding.",
-  },
-  {
-    title: "Modernization Pressures",
-    text: "Urbanization and migration trends are impacting participation levels, indicating need for revitalization.",
-  },
-];
-
-/* ── Bar chart ─────────────────────────────────────────────────────────── */
-function BarChart() {
-  const chartRef = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = chartRef.current;
-    if (!el) return;
-
-    const obs = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) {
-          setVisible(true);
-          obs.disconnect();
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-
-  return (
-    <div
-      ref={chartRef}
-      style={{
-        background: "#fff",
-        borderRadius: 12,
-        padding: "2rem",
-        marginBottom: "2rem",
-        boxShadow: "0 4px 20px rgba(92,45,0,0.06)",
-      }}
-    >
-      <h3
-        style={{
-          fontFamily: "'Cinzel', serif",
-          fontSize: "1.05rem",
-          color: "var(--earth)",
-          marginBottom: "1.5rem",
-        }}
-      >
-        Survey Outcomes — % of Respondents Reporting Positive Impact
-      </h3>
-
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.875rem" }}>
-        {barData.map((b: { label: string; value: number }, i: number) => (
-          <div
-            key={i}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.75rem",
-              flexWrap: "wrap",
-            }}
-          >
-            <div
-              style={{
-                fontSize: "0.78rem",
-                color: "var(--muted)",
-                width: 180,
-                textAlign: "right",
-              }}
-            >
-              {b.label}
-            </div>
-
-            <div className="bar-track" style={{ flex: 1 }}>
-              <div
-                className="bar-fill"
-                style={{
-                  width: visible ? `${b.value}%` : "0%",
-                  transitionDelay: `${i * 120}ms`,
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: "0.7rem",
-                    fontWeight: 700,
-                    color: "var(--deep)",
-                  }}
-                >
-                  {b.value}%
-                </span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+type TabId = "questionnaire" | "respondents" | "caretaker";
 
 /* ── Main page ─────────────────────────────────────────────────────────── */
 export default function AnalysisPage() {
-  const [tab, setTab] = useState<TabId>("findings");
+  const [tab, setTab] = useState<TabId>("questionnaire");
 
   return (
     <main style={{ background: "var(--cream)", minHeight: "100vh" }}>
@@ -164,19 +51,15 @@ export default function AnalysisPage() {
           Survey & Field Analysis
         </h1>
 
-        <p
-          style={{
-            textAlign: "center",
-            color: "rgba(255,255,255,0.6)",
-          }}
-        >
+        <p style={{ textAlign: "center", color: "rgba(255,255,255,0.6)" }}>
           Quantitative and qualitative outcomes from field research
         </p>
       </div>
 
       {/* ── CONTENT ── */}
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "3rem 1.25rem" }}>
-        {/* Tabs */}
+
+        {/* ── Main Tabs ── */}
         <div
           style={{
             display: "flex",
@@ -185,75 +68,120 @@ export default function AnalysisPage() {
             marginBottom: "2rem",
           }}
         >
-          {(["findings", "data", "questionnaire"] as TabId[]).map((t) => (
+          {(
+            [
+              { id: "questionnaire", label: "Questionnaire" },
+              { id: "respondents",   label: "Respondents Analysis" },
+              { id: "caretaker",     label: "Care Taker Analysis" },
+            ] as { id: TabId; label: string }[]
+          ).map(({ id, label }) => (
             <button
-              key={t}
-              className={`analysis-tab ${tab === t ? "active" : ""}`}
-              onClick={() => setTab(t)}
+              key={id}
+              className={`analysis-tab ${tab === id ? "active" : ""}`}
+              onClick={() => setTab(id)}
             >
-              {t === "findings"
-                ? "Key Findings"
-                : t === "data"
-                ? "Survey Data"
-                : "Questionnaire"}
+              {label}
             </button>
           ))}
         </div>
 
-        {/* FINDINGS */}
-        {tab === "findings" && (
-          <div>
-            <div style={{ display: "grid", gap: "1rem" }}>
-              {findings.map((f: any, i: number) => (
-                <div key={i} style={{ background: "#fff", padding: "1.5rem", borderRadius: 10 }}>
-                  <h4>{f.title}</h4>
-                  <p>{f.desc}</p>
-                </div>
-              ))}
-            </div>
+        {/* ── Tab: Questionnaire ── */}
+        {tab === "questionnaire" && <QuestionnaireTab />}
 
-            <h2 style={{ marginTop: "2rem" }}>Thematic Analysis</h2>
-            {thematicFindings.map((item, i) => (
-              <div key={i} style={{ background: "#fff", padding: "1.5rem", marginTop: "1rem" }}>
-                <h4>{item.title}</h4>
-                <p>{item.text}</p>
-              </div>
-            ))}
+        {/* ── Tab: Respondents Questionnaire Analysis ── */}
+        {tab === "respondents" && (
+          <div>
+            <div className="q-intro-card">
+              <strong>Respondents Questionnaire Analysis</strong> — This
+              flipbook covers survey responses from community members and
+              regular participants of Bhagabata Tungis, capturing their
+              experiences, perceptions of social cohesion, and views on
+              cultural continuity.
+            </div>
+            <div className="q-flip-frame">
+              <iframe
+                src="https://heyzine.com/flip-book/bf5747fbf9.html#page/1"
+                allowFullScreen
+                allow="clipboard-write"
+                scrolling="no"
+                title="Respondents Questionnaire Flipbook"
+                loading="lazy"
+              />
+            </div>
+            <p className="q-note">
+              Use the controls inside the flipbook to navigate pages. For the
+              best experience, use the fullscreen button.
+            </p>
           </div>
         )}
 
-        {/* DATA */}
-        {tab === "data" && (
+        {/* ── Tab: Care Taker Questionnaire Analysis ── */}
+        {tab === "caretaker" && (
           <div>
-            <BarChart />
-          </div>
-        )}
-
-        {/* ✅ QUESTIONNAIRE (UPDATED) */}
-        {tab === "questionnaire" && (
-          <div>
-            {/* Optional Intro */}
-            <div
-              style={{
-                background: "#fff8f0",
-                padding: "1.5rem",
-                borderRadius: 12,
-                marginBottom: "1.5rem",
-              }}
-            >
-              <p>
-                This questionnaire was conducted across multiple districts of
-                Odisha to understand the impact of Bhagabata Tungi.
-              </p>
+            <div className="q-intro-card">
+              <strong>Care Taker Questionnaire Analysis</strong> — This
+              flipbook presents structured questionnaire responses collected
+              from Bhagabata Tungi caretakers across multiple districts of
+              Odisha, examining their roles, motivations, and perspectives on
+              the institution's function.
             </div>
-
-            {/* Reusable Component */}
-            <QuestionnaireTab />
+            <div className="q-flip-frame">
+              <iframe
+                src="https://heyzine.com/flip-book/0be753795c.html"
+                allowFullScreen
+                allow="clipboard-write"
+                scrolling="no"
+                title="Care Taker Questionnaire Flipbook"
+                loading="lazy"
+              />
+            </div>
+            <p className="q-note">
+              Use the controls inside the flipbook to navigate pages. For the
+              best experience, use the fullscreen button.
+            </p>
           </div>
         )}
       </div>
 
       <Footer />
+
+      {/* Shared styles for flipbook panels */}
+      <style>{`
+        .q-intro-card {
+          background: #fff8f0;
+          border: 1px solid rgba(92,45,0,0.1);
+          border-radius: 12px;
+          padding: 1rem 1.25rem;
+          margin-bottom: 1.25rem;
+          font-size: 0.88rem;
+          color: var(--muted, #777);
+          line-height: 1.7;
+        }
+        .q-intro-card strong { color: var(--earth, #5c2d00); }
+        .q-flip-frame {
+          border-radius: 12px;
+          overflow: hidden;
+          border: 1px solid rgba(92,45,0,0.12);
+          background: #faf7f3;
+          width: 100%;
+          box-sizing: border-box;
+        }
+        .q-flip-frame iframe {
+          display: block;
+          width: 100%;
+          height: 600px;
+          border: none;
+        }
+        @media (max-width: 640px) {
+          .q-flip-frame iframe { height: 420px; }
+        }
+        .q-note {
+          font-size: 0.72rem;
+          color: var(--muted, #aaa);
+          text-align: center;
+          margin-top: 0.625rem;
+        }
+      `}</style>
     </main>
   );
 }
