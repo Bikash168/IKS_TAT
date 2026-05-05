@@ -11,9 +11,11 @@ export default function AboutPage() {
       {/* ── HERO ── */}
       <div style={{
         background: "linear-gradient(160deg, #1A0800 0%, #2D1200 50%, #1A0800 100%)",
-        padding: "clamp(40px, 8vw, 80px) clamp(1rem, 4vw, 2rem) clamp(40px, 6vw, 60px)",
+        padding: "clamp(40px, 8vw, 80px) clamp(1.25rem, 5vw, 3rem) clamp(40px, 6vw, 60px)",
         position: "relative",
         overflow: "hidden",
+        width: "100%",
+        boxSizing: "border-box",
       }}>
         <div style={{
           position: "absolute", top: "-50%", right: "-10%",
@@ -27,7 +29,14 @@ export default function AboutPage() {
         }}>
           <Mandala size={280} opacity={0.1} />
         </div>
-        <div style={{ maxWidth: 1100, margin: "0 auto", position: "relative", zIndex: 1 }}>
+        <div style={{
+          maxWidth: 1100,
+          margin: "0 auto",
+          position: "relative",
+          zIndex: 1,
+          width: "100%",
+          boxSizing: "border-box",
+        }}>
           <div className="section-tag" style={{ animation: "slideRight 0.7s ease both" }}>
             Indian Knowledge Systems
           </div>
@@ -45,19 +54,32 @@ export default function AboutPage() {
       </div>
 
       {/* ── MAIN GRID ── */}
-      <div style={{ background: "var(--cream)", minHeight: "60vh" }}>
+      <div style={{
+        background: "var(--cream)",
+        minHeight: "60vh",
+        width: "100%",
+        overflowX: "hidden",
+        boxSizing: "border-box",
+      }}>
         <div style={{
           maxWidth: 1100,
           margin: "0 auto",
-          padding: "clamp(2rem, 5vw, 5rem) clamp(1rem, 4vw, 2rem)",
+          padding: "clamp(2rem, 5vw, 5rem) clamp(1.25rem, 5vw, 2rem)",
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 420px), 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
           gap: "clamp(2rem, 4vw, 4rem)",
           alignItems: "start",
+          boxSizing: "border-box",
+          width: "100%",
         }}>
 
           {/* ── Left: text ── */}
-          <div style={{ animation: "slideRight 0.8s ease 0.1s both", minWidth: 0 }}>
+          <div style={{
+            animation: "slideRight 0.8s ease 0.1s both",
+            minWidth: 0,
+            width: "100%",
+            boxSizing: "border-box",
+          }}>
             <h3 className="about-section-heading">
               Indian Knowledge Systems
             </h3>
@@ -88,18 +110,33 @@ export default function AboutPage() {
           </div>
 
           {/* ── Right: PI card + timeline ── */}
-          <div style={{ animation: "slideLeft 0.8s ease 0.2s both", minWidth: 0 }}>
+          <div style={{
+            animation: "slideLeft 0.8s ease 0.2s both",
+            minWidth: 0,
+            width: "100%",
+            boxSizing: "border-box",
+          }}>
 
             {/* PI Card */}
             <div className="pi-card">
               <h3 className="pi-card-label">Principal Investigator</h3>
               <div style={{ display: "flex", gap: "1rem", alignItems: "flex-start", flexWrap: "wrap" }}>
                 <div className="pi-avatar">👩‍🏫</div>
-                <div style={{ minWidth: 0 }}>
-                  <div style={{ color: "#fff", fontWeight: 700, marginBottom: 4, wordBreak: "break-word" }}>
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <div style={{
+                    color: "#fff",
+                    fontWeight: 700,
+                    marginBottom: 4,
+                    wordBreak: "break-word",
+                    fontSize: "clamp(0.9rem, 2.5vw, 1rem)",
+                  }}>
                     Dr. Munmun Mohanty
                   </div>
-                  <div style={{ fontSize: "clamp(0.72rem, 1.8vw, 0.8rem)", color: "rgba(255,255,255,0.5)", lineHeight: 1.5 }}>
+                  <div style={{
+                    fontSize: "clamp(0.72rem, 1.8vw, 0.8rem)",
+                    color: "rgba(255,255,255,0.5)",
+                    lineHeight: 1.5,
+                  }}>
                     Trident Academy of Technology<br />Bhubaneswar, Odisha
                   </div>
                 </div>
@@ -136,18 +173,54 @@ export default function AboutPage() {
 
       {/* ── ALL RESPONSIVE STYLES ── */}
       <style>{`
-        *, *::before, *::after { box-sizing: border-box; }
+        /* ── Global overflow guard ── */
+        *, *::before, *::after {
+          box-sizing: border-box;
+        }
+        html, body {
+          max-width: 100vw;
+          overflow-x: hidden;
+        }
 
         /* ── Hero ── */
-        .section-title-lg {
-          font-size: clamp(1.8rem, 6vw, 3.5rem) !important;
+        .section-tag {
+          font-size: clamp(0.65rem, 2vw, 0.75rem);
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: var(--saffron);
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 1rem;
           word-break: break-word;
+        }
+        .section-tag::before {
+          content: '';
+          display: inline-block;
+          width: 2rem;
+          height: 1.5px;
+          background: var(--saffron);
+          flex-shrink: 0;
+        }
+        .section-title-lg {
+          font-family: 'Cinzel', serif;
+          font-size: clamp(1.8rem, 7vw, 3.5rem) !important;
+          word-break: break-word;
+          overflow-wrap: break-word;
           hyphens: auto;
           line-height: 1.15;
+          max-width: 100%;
+          color: #fff;
+          margin: 0 0 1.25rem;
+          padding: 0;
         }
         .section-body {
+          font-family: 'Cormorant Garamond', serif;
           font-size: clamp(0.9rem, 2.5vw, 1.15rem) !important;
           line-height: 1.7;
+          color: rgba(255, 255, 255, 0.75);
+          word-break: break-word;
+          overflow-wrap: break-word;
         }
         @media (max-width: 600px) {
           .hero-mandala { display: none !important; }
@@ -156,10 +229,11 @@ export default function AboutPage() {
         /* ── Text blocks ── */
         .about-section-heading {
           font-family: 'Cinzel', serif;
-          font-size: clamp(1.05rem, 3vw, 1.5rem);
+          font-size: clamp(1rem, 3vw, 1.5rem);
           font-weight: 600;
           color: var(--earth);
           margin-bottom: 1rem;
+          word-break: break-word;
         }
         .about-body-text {
           font-family: 'Cormorant Garamond', serif;
@@ -169,14 +243,16 @@ export default function AboutPage() {
           margin-bottom: 1.25rem;
           text-align: justify;
           word-break: break-word;
+          overflow-wrap: break-word;
           hyphens: auto;
+          max-width: 100%;
         }
 
         /* ── Blockquote ── */
         .about-blockquote {
           background: var(--deep);
           border-left: 3px solid var(--saffron);
-          padding: clamp(1rem, 3vw, 1.5rem) clamp(1rem, 3vw, 1.75rem);
+          padding: clamp(0.875rem, 3vw, 1.5rem) clamp(0.875rem, 3vw, 1.75rem);
           margin: 1.5rem 0;
           border-radius: 0 8px 8px 0;
           font-family: 'Cormorant Garamond', serif;
@@ -184,6 +260,9 @@ export default function AboutPage() {
           font-style: italic;
           color: var(--gold-light);
           line-height: 1.7;
+          word-break: break-word;
+          overflow-wrap: break-word;
+          max-width: 100%;
         }
 
         /* ── PI Card ── */
@@ -192,12 +271,16 @@ export default function AboutPage() {
           border-radius: 16px;
           padding: clamp(1rem, 3vw, 2rem);
           margin-bottom: 1.5rem;
+          width: 100%;
+          box-sizing: border-box;
+          overflow: hidden;
         }
         .pi-card-label {
           font-family: 'Cinzel', serif;
           font-size: clamp(0.78rem, 2vw, 1rem);
           color: var(--gold-light);
           margin-bottom: 1.25rem;
+          margin-top: 0;
         }
         .pi-avatar {
           width: clamp(44px, 8vw, 56px);
@@ -213,16 +296,66 @@ export default function AboutPage() {
 
         /* ── Timeline ── */
         .timeline-item {
+          display: flex;
+          gap: clamp(0.75rem, 2vw, 1rem);
           opacity: 0;
           transform: translateY(20px);
           transition: opacity 0.5s ease, transform 0.5s ease;
+          width: 100%;
+          box-sizing: border-box;
         }
         .timeline-item.visible {
           opacity: 1;
           transform: translateY(0);
         }
+        .timeline-left {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          flex-shrink: 0;
+        }
+        .timeline-dot {
+          width: clamp(30px, 6vw, 36px);
+          height: clamp(30px, 6vw, 36px);
+          background: var(--deep);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: clamp(0.85rem, 2vw, 1rem);
+          flex-shrink: 0;
+          border: 2px solid var(--saffron);
+        }
+        .timeline-line {
+          width: 2px;
+          flex: 1;
+          min-height: 24px;
+          background: linear-gradient(to bottom, var(--saffron), transparent);
+          margin: 4px 0;
+        }
+        .timeline-content {
+          padding-bottom: clamp(1rem, 3vw, 1.5rem);
+          min-width: 0;
+          flex: 1;
+        }
+        .timeline-content h4 {
+          font-family: 'Cinzel', serif;
+          font-size: clamp(0.78rem, 2vw, 0.9rem);
+          color: var(--earth);
+          margin: 0 0 4px;
+          word-break: break-word;
+        }
+        .timeline-content p {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: clamp(0.82rem, 2vw, 0.92rem);
+          color: #6B3A00;
+          line-height: 1.6;
+          margin: 0;
+          word-break: break-word;
+          overflow-wrap: break-word;
+        }
 
-        /* Stack columns on narrow screens */
+        /* ── Mobile overrides ── */
         @media (max-width: 480px) {
           .about-body-text {
             text-align: left;
@@ -231,6 +364,16 @@ export default function AboutPage() {
             margin-left: 0;
             margin-right: 0;
           }
+        }
+
+        /* ── Animations ── */
+        @keyframes slideRight {
+          from { opacity: 0; transform: translateX(-24px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideLeft {
+          from { opacity: 0; transform: translateX(24px); }
+          to   { opacity: 1; transform: translateX(0); }
         }
       `}</style>
     </>
