@@ -9,8 +9,8 @@ type TabId = "questionnaire" | "respondents" | "caretaker";
 
 const TABS: { id: TabId; label: string; shortLabel: string }[] = [
   { id: "questionnaire", label: "Questionnaire",           shortLabel: "Questionnaire" },
-  { id: "respondents",   label: "Respondents Analysis",    shortLabel: "Respondents" },
-  { id: "caretaker",     label: "Care Taker Analysis",     shortLabel: "Care Taker" },
+  { id: "respondents",   label: "Respondents Analysis",    shortLabel: "Respondents Analysis" },
+  { id: "caretaker",     label: "Care Taker Analysis",     shortLabel: "Care Taker Analysis" },
 ];
 
 /* ── Main page ─────────────────────────────────────────────────────────── */
