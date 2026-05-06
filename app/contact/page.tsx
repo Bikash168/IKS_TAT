@@ -23,7 +23,7 @@ const teamMembers = [
     name: "Mr. Tushar Ranjan Panda",
     phone: "+91 94376 03536",
     email: "tushar.panda@tat.ac.in",
-    image: CO1_IMG,
+    image: CO2_IMG,
     color: "#b45309",
   },
   {
@@ -32,7 +32,7 @@ const teamMembers = [
     name: "Dr. Sonam Priyadarshini",
     phone: "+91 94378 74351",
     email: "sonam.priyadarshini@tat.ac.in",
-    image: CO2_IMG,
+    image: CO1_IMG,
     color: "#92400e",
   },
 ];
