@@ -1,196 +1,401 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Footer from "../components/Footer";
-import { useInView } from "../components/useInView";
-import { videoData } from "../components/data";
 
-function VideoCard({ v, index }: { v: typeof videoData[0]; index: number }) {
-  const { ref, visible } = useInView();
+// ── Extract YouTube video ID from URL ──
+function getYouTubeId(url: string): string {
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([^&?/]+)/);
+  return match ? match[1] : "";
+}
+
+// ── Interview & recording data ──
+const allVideos = [
+  {
+    src: "https://youtu.be/B4ZlLLn4v6M",
+    label: "Interview — Community Elder",
+    category: "Interviews",
+    desc: "An in-depth conversation exploring oral traditions and cultural memory preserved across generations.",
+  },
+  {
+    src: "https://youtu.be/Mw-2MExVW98",
+    label: "Interview — Local Scholar",
+    category: "Interviews",
+    desc: "Scholarly perspectives on the historical significance of Bhagabata Tungi and its place in Odishan heritage.",
+  },
+  {
+    src: "https://youtu.be/iDFt1LIrlx4",
+    label: "Field Documentation I",
+    category: "Field Documentation",
+    desc: "On-site documentation capturing the architectural and spatial character of the Tungi traditions.",
+  },
+
+];
+
+export default function InterviewsPage() {
+  const [lightbox, setLightbox]       = useState<number | null>(null);
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+
+  // Keyboard navigation in lightbox
+  useEffect(() => {
+    if (lightbox === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft")  setLightbox((l) => l === null ? null : (l - 1 + allVideos.length) % allVideos.length);
+      if (e.key === "ArrowRight") setLightbox((l) => l === null ? null : (l + 1) % allVideos.length);
+      if (e.key === "Escape")     setLightbox(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightbox]);
+
+  // Lock scroll when lightbox is open
+  useEffect(() => {
+    document.body.style.overflow = lightbox !== null ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [lightbox]);
+
+  const closeLightbox = () => setLightbox(null);
+  const prevVideo     = () => setLightbox((l) => l === null ? null : (l - 1 + allVideos.length) % allVideos.length);
+  const nextVideo     = () => setLightbox((l) => l === null ? null : (l + 1) % allVideos.length);
+
   return (
-    <div
-      ref={ref}
-      className={`video-card ${visible ? "visible" : ""}`}
-      style={{ transitionDelay: `${index * 80}ms` }}
-    >
-      {/* Thumbnail */}
+    <>
+      {/* ── HERO ── */}
       <div style={{
+        background: "linear-gradient(160deg, #1A0800 0%, #2D1200 50%, #1A0800 100%)",
+        padding: "clamp(3rem, 8vw, 5rem) clamp(1rem, 4vw, 2rem) clamp(2.5rem, 6vw, 3.75rem)",
+        textAlign: "center",
         position: "relative",
-        paddingTop: "56.25%",
-        background: "var(--deep)",
         overflow: "hidden",
       }}>
         <div style={{
           position: "absolute", inset: 0,
-          display: "flex", alignItems: "center",
-          justifyContent: "center", flexDirection: "column", gap: "1rem",
-          background: "linear-gradient(135deg, #1A0800, #2D1200)",
-        }}>
-          <div className="play-btn">
-            <div style={{
-              width: 0, height: 0,
-              borderLeft: "18px solid #fff",
-              borderTop: "11px solid transparent",
-              borderBottom: "11px solid transparent",
-              marginLeft: 4,
-            }} />
+          background: "radial-gradient(ellipse at 50% 100%, rgba(232,100,12,0.12) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <div className="section-tag" style={{ justifyContent: "center", animation: "fadeUp 0.6s ease both" }}>
+            Visual Media
           </div>
-          <div style={{
-            fontSize: "0.7rem", fontWeight: 700,
-            letterSpacing: "0.1em",
-            color: "rgba(255,255,255,0.5)",
-          }}>
-            {v.duration}
-          </div>
-        </div>
-      </div>
-
-      {/* Info */}
-      <div style={{ padding: "clamp(0.875rem, 2vw, 1.25rem)" }}>
-        <div style={{
-          fontSize: "0.65rem", fontWeight: 700,
-          letterSpacing: "0.12em", textTransform: "uppercase",
-          color: "var(--saffron)", marginBottom: "0.5rem",
-        }}>
-          {v.tag}
-        </div>
-        <h3 style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: "clamp(0.95rem, 2vw, 1.1rem)",
-          fontWeight: 600, color: "var(--text)",
-          marginBottom: "0.4rem", lineHeight: 1.4,
-        }}>
-          {v.title}
-        </h3>
-        <p style={{
-          fontSize: "clamp(0.75rem, 1.8vw, 0.8rem)",
-          color: "var(--muted)", lineHeight: 1.5,
-        }}>
-          {v.desc}
-        </p>
-        <div style={{
-          display: "flex", justifyContent: "space-between", alignItems: "center",
-          marginTop: "1rem", paddingTop: "0.75rem",
-          borderTop: "1px solid rgba(92,45,0,0.1)",
-          fontSize: "clamp(0.65rem, 1.5vw, 0.72rem)",
-          color: "var(--muted)",
-          flexWrap: "wrap", gap: "0.25rem",
-        }}>
-          <span>📍 {v.location}</span>
-          <span>🎬 {v.duration}</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default function InterviewsPage() {
-  return (
-    <>
-      {/* ── HEADER ── */}
-      <div style={{
-        background: "linear-gradient(135deg, var(--earth) 0%, var(--saffron) 100%)",
-        padding: "clamp(3rem, 8vw, 5rem) clamp(1rem, 4vw, 2rem) clamp(2.5rem, 6vw, 4rem)",
-        position: "relative",
-        overflow: "hidden",
-      }}>
-        <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.15)" }} />
-        <div style={{
-          maxWidth: 800, margin: "0 auto",
-          textAlign: "center", position: "relative", zIndex: 2,
-        }}>
-          <div className="section-tag" style={{
-            justifyContent: "center",
-            color: "rgba(255,255,255,0.75)",
-            animation: "fadeUp 0.5s ease both",
-            display: "flex",
-          }}>
-            Field Documentation
-          </div>
-          <h1 style={{
+          <h1 className="section-title-lg" style={{
             fontFamily: "'Cinzel', serif",
-            fontSize: "clamp(1.6rem, 4vw, 3rem)",
             color: "#fff",
-            marginBottom: "1rem",
+            margin: "0.5rem 0 1rem",
             animation: "fadeUp 0.7s ease 0.15s both",
-            wordBreak: "break-word",
           }}>
             Video Interviews<br />&amp; Recordings
           </h1>
-          <p style={{
+          <p className="section-body" style={{
             fontFamily: "'Cormorant Garamond', serif",
-            fontSize: "clamp(0.95rem, 2.5vw, 1.1rem)",
-            color: "rgba(255,255,255,0.8)",
-            fontStyle: "italic", lineHeight: 1.7,
+            fontStyle: "italic",
+            color: "rgba(255,255,255,0.55)",
+            margin: "0 auto",
+            maxWidth: "min(100%, 580px)",
+            lineHeight: 1.7,
             animation: "fadeUp 0.7s ease 0.3s both",
-            padding: "0 clamp(0rem, 2vw, 1rem)",
           }}>
-            Primary source material gathered during field research—community voices, scholarly perspectives,
-            and living documentation of Bhagabata Tungi traditions.
+            Primary source material gathered during field research — community voices, scholarly perspectives,
+            and living documentation of Bhagabata Tungi traditions from Odisha.
           </p>
         </div>
       </div>
 
-      {/* ── VIDEO GRID ── */}
-      <div style={{ background: "var(--cream)", minHeight: "60vh" }}>
+      {/* ── GRID ── */}
+      <div style={{ background: "var(--deep)", minHeight: "50vh" }}>
         <div style={{
-          maxWidth: 1100, margin: "0 auto",
-          padding: "clamp(2rem, 5vw, 3rem) clamp(1rem, 4vw, 2rem) clamp(3rem, 6vw, 5rem)",
-          display: "grid",
-          // 3 cols desktop → 2 cols tablet → 1 col mobile
-          gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 300px), 1fr))",
-          gap: "clamp(1rem, 2.5vw, 1.5rem)",
+          maxWidth: 1200, margin: "0 auto",
+          padding: "clamp(1.5rem, 4vw, 2.5rem) clamp(1rem, 4vw, 2rem) clamp(3rem, 6vw, 4rem)",
         }}>
-          {videoData.map((v, i) => (
-            <VideoCard key={i} v={v} index={i} />
-          ))}
+          <div className="video-grid">
+            {allVideos.map((vid, i) => {
+              const ytId  = getYouTubeId(vid.src);
+              const thumb = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+              return (
+                <div
+                  key={vid.src}
+                  className="video-card"
+                  style={{ animationDelay: `${Math.min(i * 60, 500)}ms` }}
+                  onClick={() => setLightbox(i)}
+                  onMouseEnter={() => setHoveredCard(i)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                >
+                  {/* Thumbnail */}
+                  <div className="video-thumb">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={thumb}
+                      alt={vid.label}
+                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                    />
+                    <div className="thumb-overlay" />
+                    <div className={`play-btn ${hoveredCard === i ? "hovered" : ""}`}>
+                      <div className="play-triangle" />
+                    </div>
+                    <div className="thumb-category">{vid.category}</div>
+                  </div>
+
+                  {/* Info bar */}
+                  <div className="video-info">
+                    <div className="video-title">{vid.label}</div>
+                    <div className="video-desc">{vid.desc}</div>
+                    <div className="video-meta">
+                      <span className="play-label">▶ Play</span>
+                      <span>YouTube</span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 
-      {/* ── NOTE ── */}
-      <div style={{
-        background: "var(--saffron-pale)",
-        padding: "clamp(2rem, 5vw, 3rem) clamp(1rem, 4vw, 2rem)",
-        textAlign: "center",
-      }}>
-        <p style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: "clamp(0.95rem, 2.5vw, 1.1rem)",
-          fontStyle: "italic",
-          color: "var(--muted)",
-          maxWidth: 600,
-          margin: "0 auto",
-        }}>
-          Upload video files to /public/videos/ directory — name them video1.mp4, video2.mp4, etc. to enable playback.
-        </p>
-      </div>
+      {/* ── LIGHTBOX ── */}
+      {lightbox !== null && allVideos[lightbox] && (
+        <div className="lightbox-backdrop" onClick={closeLightbox}>
+          <button className="lb-close" onClick={closeLightbox} aria-label="Close">✕</button>
+          <div className="lb-counter">{lightbox + 1} / {allVideos.length}</div>
+
+          <div className="lb-content" onClick={(e) => e.stopPropagation()}>
+            <div className="lb-video-wrap">
+              <iframe
+                key={allVideos[lightbox].src}
+                src={`https://www.youtube.com/embed/${getYouTubeId(allVideos[lightbox].src)}?autoplay=1`}
+                title={allVideos[lightbox].label}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                style={{ width: "100%", height: "100%", border: "none", borderRadius: 8 }}
+              />
+            </div>
+
+            <div className="lb-caption">
+              <div className="lb-caption-left">
+                <div className="lb-title">{allVideos[lightbox].label}</div>
+                <div className="lb-category">{allVideos[lightbox].category}</div>
+              </div>
+              <div className="lb-nav">
+                <button className="lb-arrow" onClick={(e) => { e.stopPropagation(); prevVideo(); }} aria-label="Previous">‹</button>
+                <button className="lb-arrow" onClick={(e) => { e.stopPropagation(); nextVideo(); }} aria-label="Next">›</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
 
-      {/* ── RESPONSIVE STYLES ── */}
+      {/* ── STYLES ── */}
       <style>{`
         *, *::before, *::after { box-sizing: border-box; }
-        body { overflow-x: hidden; max-width: 100vw; }
+        body { overflow-x: hidden; }
 
-        /* Video card animation */
+        .section-title-lg { font-size: clamp(2rem, 6vw, 3.5rem) !important; word-break: break-word; }
+        .section-body     { font-size: clamp(0.95rem, 2.5vw, 1.15rem) !important; }
+
+        /* ── Video grid: 3 → 2 → 1 ── */
+        .video-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: clamp(0.75rem, 2vw, 1.25rem);
+        }
+        @media (max-width: 900px) { .video-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 520px) { .video-grid { grid-template-columns: 1fr; } }
+
+        /* ── Video card ── */
         .video-card {
-          opacity: 0;
-          transform: translateY(20px);
-          transition: opacity 0.5s ease, transform 0.5s ease;
-          background: #fff;
-          border-radius: 12px;
+          border-radius: 10px;
           overflow: hidden;
-          border: 1px solid rgba(92,45,0,0.08);
+          cursor: pointer;
+          background: #110400;
+          border: 1px solid rgba(232,100,12,0.1);
+          transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+          animation: fadeUp 0.45s ease both;
         }
-        .video-card.visible {
-          opacity: 1;
-          transform: translateY(0);
+        .video-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 14px 36px rgba(232,100,12,0.18);
+          border-color: rgba(232,100,12,0.4);
         }
 
-        /* Force 2 cols on tablet, 1 col on small mobile */
-        @media (max-width: 640px) {
-          .video-card h3 {
-            font-size: 1rem !important;
-          }
+        /* Thumbnail */
+        .video-thumb {
+          position: relative;
+          aspect-ratio: 16 / 9;
+          background: #1a0a00;
+          overflow: hidden;
+        }
+        .thumb-overlay {
+          position: absolute; inset: 0;
+          background: linear-gradient(to top, rgba(10,3,0,0.7) 0%, rgba(0,0,0,0.15) 60%, transparent 100%);
+          transition: background 0.25s ease;
+        }
+        .video-card:hover .thumb-overlay {
+          background: linear-gradient(to top, rgba(10,3,0,0.5) 0%, rgba(0,0,0,0.1) 60%, transparent 100%);
+        }
+
+        /* Play button */
+        .play-btn {
+          position: absolute;
+          top: 50%; left: 50%;
+          transform: translate(-50%, -50%) scale(1);
+          width: clamp(40px, 7vw, 52px);
+          height: clamp(40px, 7vw, 52px);
+          border-radius: 50%;
+          background: rgba(232,100,12,0.85);
+          display: flex; align-items: center; justify-content: center;
+          box-shadow: 0 4px 20px rgba(232,100,12,0.45);
+          transition: transform 0.25s ease, background 0.2s ease;
+        }
+        .play-btn.hovered {
+          transform: translate(-50%, -50%) scale(1.12);
+          background: var(--saffron);
+        }
+        .play-triangle {
+          width: 0; height: 0;
+          border-left: clamp(10px, 2vw, 14px) solid #fff;
+          border-top: clamp(6px, 1.2vw, 9px) solid transparent;
+          border-bottom: clamp(6px, 1.2vw, 9px) solid transparent;
+          margin-left: 3px;
+        }
+
+        /* Category pill */
+        .thumb-category {
+          position: absolute;
+          bottom: 8px; left: 8px;
+          background: rgba(0,0,0,0.6);
+          backdrop-filter: blur(4px);
+          border-radius: 12px;
+          padding: 3px 9px;
+          font-size: 0.62rem;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          color: rgba(255,255,255,0.7);
+        }
+
+        /* Info bar */
+        .video-info {
+          padding: clamp(0.65rem, 2vw, 0.9rem) clamp(0.75rem, 2vw, 1rem);
+          border-top: 1px solid rgba(232,100,12,0.12);
+          background: #110400;
+        }
+        .video-title {
+          color: #fff;
+          font-family: 'Cinzel', serif;
+          font-weight: 600;
+          font-size: clamp(0.75rem, 2vw, 0.88rem);
+          margin-bottom: 5px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .video-desc {
+          color: rgba(255,255,255,0.45);
+          font-size: clamp(0.68rem, 1.6vw, 0.75rem);
+          line-height: 1.5;
+          margin-bottom: 8px;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        .video-meta {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: clamp(0.65rem, 1.5vw, 0.72rem);
+          color: rgba(255,255,255,0.3);
+          font-weight: 600;
+          letter-spacing: 0.06em;
+          padding-top: 6px;
+          border-top: 1px solid rgba(232,100,12,0.08);
+        }
+        .play-label {
+          color: var(--saffron);
+          font-size: 0.68rem;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+        }
+
+        /* ── Lightbox ── */
+        .lightbox-backdrop {
+          position: fixed; inset: 0; z-index: 2000;
+          background: rgba(0,0,0,0.96);
+          display: flex; flex-direction: column;
+          align-items: center; justify-content: center;
+          padding: clamp(1rem, 4vw, 2rem);
+        }
+        .lb-close {
+          position: absolute;
+          top: clamp(0.75rem, 2vw, 1.25rem);
+          right: clamp(0.75rem, 2vw, 1.25rem);
+          width: clamp(32px, 4vw, 40px);
+          height: clamp(32px, 4vw, 40px);
+          border-radius: 50%;
+          background: rgba(255,255,255,0.1);
+          border: none; color: #fff;
+          font-size: clamp(0.8rem, 2vw, 1rem);
+          cursor: pointer; z-index: 2002;
+          display: flex; align-items: center; justify-content: center;
+          transition: background 0.2s;
+        }
+        .lb-close:hover { background: rgba(255,255,255,0.22); }
+        .lb-counter {
+          position: absolute;
+          top: clamp(0.75rem, 2vw, 1.25rem);
+          left: 50%; transform: translateX(-50%);
+          font-size: 0.72rem; font-weight: 700;
+          color: rgba(255,255,255,0.35);
+          letter-spacing: 0.15em;
+          white-space: nowrap;
+        }
+        .lb-content { width: min(860px, 92vw); }
+        .lb-video-wrap {
+          width: 100%;
+          aspect-ratio: 16 / 9;
+          border-radius: 8px;
+          overflow: hidden;
+          background: #000;
+        }
+        .lb-caption {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          margin-top: 0.9rem;
+          flex-wrap: wrap;
+        }
+        .lb-caption-left { flex: 1; min-width: 0; }
+        .lb-title {
+          color: #fff;
+          font-family: 'Cinzel', serif;
+          font-size: clamp(0.85rem, 2.5vw, 1rem);
+          font-weight: 600;
+          margin-bottom: 4px;
+          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .lb-category {
+          font-size: 0.72rem; font-weight: 700;
+          letter-spacing: 0.12em;
+          color: var(--saffron);
+          text-transform: uppercase;
+        }
+        .lb-nav { display: flex; gap: 0.5rem; flex-shrink: 0; }
+        .lb-arrow {
+          width: clamp(36px, 5vw, 44px);
+          height: clamp(36px, 5vw, 44px);
+          border-radius: 50%;
+          background: rgba(232,100,12,0.85);
+          border: none; color: #fff;
+          font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+          cursor: pointer;
+          display: flex; align-items: center; justify-content: center;
+          transition: background 0.2s;
+        }
+        .lb-arrow:hover { background: var(--saffron); }
+
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(16px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
       `}</style>
     </>
