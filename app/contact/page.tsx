@@ -29,7 +29,7 @@ const teamMembers = [
   {
     role: "Co-Principal Investigator",
     roleShort: "Co-PI",
-    name: "Dr. Sonam Priyadarshini",
+    name: "Dr. Sonam Subhadarshini",
     phone: "+91 94378 74351",
     email: "sonam.priyadarshini@tat.ac.in",
     image: CO1_IMG,
