@@ -31,7 +31,7 @@ const teamMembers = [
     roleShort: "Co-PI",
     name: "Dr. Sonam Subhadarshini",
     phone: "+91 94378 74351",
-    email: "sonam.subhadarshini@gmail.com",
+    email: "sonam.subhadarshini@tat.ac.in",
     image: CO1_IMG,
     color: "#92400e",
   },
