@@ -15,7 +15,7 @@ const allVideos = [
   { src: "https://youtu.be/o0MPLX40lEA", label: "Video 2",  category: "Community Life" },
   { src: "https://youtu.be/0GiMTWAMs-g", label: "Video 4",  category: "Field Documentation" },
   { src: "https://youtu.be/ZDi3GsoY5AE", label: "Video 7",  category: "Interviews" },
-  { src: "https://youtu.be/Mw-2MExVW98", label: "Video 8",  category: "Interviews" },
+  { src: "https://youtu.be/bP2Zpf_Q6KI", label: "Video 8",  category: "Interviews" },
   { src: "https://youtu.be/fbFydE1jti4", label: "Video 10", category: "Community Life" },
   { src: "https://youtu.be/H5QH4aUqNlg", label: "Video 12", category: "Community Life" },
   { src: "https://youtu.be/jqpc1gar5Gc", label: "Video 13", category: "Community Life" },

@@ -18,7 +18,7 @@ const allVideos = [
     desc: "An in-depth conversation exploring oral traditions and cultural memory preserved across generations.",
   },
   {
-    src: "https://youtu.be/Mw-2MExVW98",
+    src: "https://youtu.be/bP2Zpf_Q6KI",
     label: "Interview — Local Scholar",
     category: "Interviews",
     desc: "Scholarly perspectives on the historical significance of Bhagabata Tungi and its place in Odishan heritage.",
