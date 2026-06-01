@@ -24,7 +24,7 @@ const allVideos = [
     desc: "Scholarly perspectives on the historical significance of Bhagabata Tungi and its place in Odishan heritage.",
   },
   {
-    src: "https://youtu.be/iDFt1LIrlx4",
+    src: "https://youtu.be/VrJW-gsUCvc",
     label: "Field Documentation I",
     category: "Field Documentation",
     desc: "On-site documentation capturing the architectural and spatial character of the Tungi traditions.",
