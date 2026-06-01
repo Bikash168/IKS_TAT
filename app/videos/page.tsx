@@ -25,6 +25,7 @@ const allVideos = [
 { src: "https://youtu.be/VrJW-gsUCvc", label: "Video 21",  category: "Interviews" },
 { src: "https://youtu.be/YwG2-KOpNGY", label: "Video 22",  category: "Field Documentation" },
 { src: "https://youtube.com/shorts/FqwxhB4Of7A", label: "Video 23",  category: "Field Documentation" },
+  { src: "https://youtube.com/shorts/DbgKb6lzgy8", label: "Video 19", category: "Community Life" },
 ];
 
 export default function VideosPage() {
