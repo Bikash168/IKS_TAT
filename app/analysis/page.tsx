@@ -147,7 +147,7 @@ export default function AnalysisPage() {
             </div>
             <div className="q-flip-frame">
               <iframe
-                src="https://heyzine.com/flip-book/bf5747fbf9.html#page/1"
+                src="https://heyzine.com/flip-book/ba82a8edcf.html"
                 allowFullScreen
                 allow="clipboard-write"
                 scrolling="no"
@@ -174,7 +174,7 @@ export default function AnalysisPage() {
             </div>
             <div className="q-flip-frame">
               <iframe
-                src="https://heyzine.com/flip-book/0be753795c.html"
+                src="https://heyzine.com/flip-book/0ba19454bb.html"
                 allowFullScreen
                 allow="clipboard-write"
                 scrolling="no"
