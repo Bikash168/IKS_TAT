@@ -12,7 +12,7 @@ function getYouTubeId(url: string): string {
 // ── Interview & recording data ──
 const allVideos = [
   {
-    src: "https://youtu.be/B4ZlLLn4v6M",
+    src: "https://youtu.be/dVGhVpFRjMw",
     label: "Interview — Community Elder",
     category: "Interviews",
     desc: "An in-depth conversation exploring oral traditions and cultural memory preserved across generations.",

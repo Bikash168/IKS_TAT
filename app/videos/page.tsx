@@ -11,7 +11,7 @@ function getYouTubeId(url: string): string {
 
 // ── Video metadata with YouTube URLs ──
 const allVideos = [
-  { src: "https://youtu.be/B4ZlLLn4v6M", label: "Video 1",  category: "Field Documentation" },
+  { src: "https://youtu.be/dVGhVpFRjMw", label: "Video 1",  category: "Field Documentation" },
   { src: "https://youtu.be/o0MPLX40lEA", label: "Video 2",  category: "Community Life" },
   { src: "https://youtu.be/0GiMTWAMs-g", label: "Video 4",  category: "Field Documentation" },
   { src: "https://youtu.be/ZDi3GsoY5AE", label: "Video 7",  category: "Interviews" },
