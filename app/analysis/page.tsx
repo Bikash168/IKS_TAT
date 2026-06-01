@@ -5,9 +5,10 @@ import Footer from "../components/Footer";
 import Mandala from "../components/Mandala";
 import QuestionnaireTab from "../components/QuestionnaireSection";
 
-type TabId = "questionnaire" | "respondents" | "caretaker";
+type TabId = "history" | "questionnaire" | "respondents" | "caretaker";
 
 const TABS: { id: TabId; label: string; shortLabel: string }[] = [
+  { id: "history", label: "History",           shortLabel: "History" },
   { id: "questionnaire", label: "Questionnaire",           shortLabel: "Questionnaire" },
   { id: "respondents",   label: "Respondents Analysis",    shortLabel: "Respondents Analysis" },
   { id: "caretaker",     label: "Care Taker Analysis",     shortLabel: "Care Taker Analysis" },
@@ -107,6 +108,29 @@ export default function AnalysisPage() {
             </button>
           ))}
         </div>
+  {/* ── Tab: History ── */}
+        {tab === "history" && (
+          <div>
+            <div className="q-intro-card">
+              <strong>History</strong> — This
+              flipbook covers History of Bhagabata Tungis, The historical development of Bhagavata Tungi is closely associated with the Bhakti Movement in odisha.
+            </div>
+            <div className="q-flip-frame">
+              <iframe
+                src="https://heyzine.com/flip-book/be0a3bc134.html"
+                allowFullScreen
+                allow="clipboard-write"
+                scrolling="no"
+                title="Respondents Questionnaire Flipbook"
+                loading="lazy"
+              />
+            </div>
+            <p className="q-note">
+              Use the controls inside the flipbook to navigate pages. For the
+              best experience, use the fullscreen button.
+            </p>
+          </div>
+        )}
 
         {/* ── Tab: Questionnaire ── */}
         {tab === "questionnaire" && <QuestionnaireTab />}
