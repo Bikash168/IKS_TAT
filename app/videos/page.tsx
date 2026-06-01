@@ -23,6 +23,7 @@ const allVideos = [
   { src: "https://youtu.be/jdQQIRsKdF0", label: "Video 19", category: "Community Life" },
  { src: "https://youtu.be/DPjc_PwAlQQ", label: "Video 20", category: "Interviews" },
 { src: "https://youtu.be/VrJW-gsUCvc", label: "Video 21",  category: "Interviews" },
+{ src: "https://youtu.be/YwG2-KOpNGY", label: "Video 22",  category: "Field Documentation" },
 ];
 
 export default function VideosPage() {
