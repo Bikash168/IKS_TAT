@@ -5,12 +5,12 @@ import Footer from "../components/Footer";
 import Mandala from "../components/Mandala";
 import QuestionnaireTab from "../components/QuestionnaireSection";
 
-type TabId = "history" | "questionnaire" | "respondents" | "caretaker";
+type TabId = "history" | "questionnaire" | "participants" | "caretaker";
 
 const TABS: { id: TabId; label: string; shortLabel: string }[] = [
   { id: "history", label: "History",           shortLabel: "History" },
   { id: "questionnaire", label: "Questionnaire",           shortLabel: "Questionnaire" },
-  { id: "respondents",   label: "Respondents Analysis",    shortLabel: "Respondents Analysis" },
+  { id: "participants",   label: "Participants Analysis",    shortLabel: "Participants Analysis" },
   { id: "caretaker",     label: "Care Taker Analysis",     shortLabel: "Care Taker Analysis" },
 ];
 
@@ -135,8 +135,8 @@ export default function AnalysisPage() {
         {/* ── Tab: Questionnaire ── */}
         {tab === "questionnaire" && <QuestionnaireTab />}
 
-        {/* ── Tab: Respondents Questionnaire Analysis ── */}
-        {tab === "respondents" && (
+        {/* ── Tab: Participants Questionnaire Analysis ── */}
+        {tab === "participants" && (
           <div>
             <div className="q-intro-card">
               <strong>Respondents Questionnaire Analysis</strong> — This
